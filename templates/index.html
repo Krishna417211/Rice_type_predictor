@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌾Rice Type Predictor</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            background-color: #361b02; /* Cream */
+            color: #6B4F4F; /* Brown */
+            margin: 0;
+            padding: 0;
+            background-image: url('https://images.unsplash.com/photo-1586201375765-c129a4d3c275?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        .overlay {
+            background-color: rgba(50, 29, 3, 0.8); /* Semi-transparent cream */
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: #FFFFFF;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border: 1px solid #D2B48C; /* Tan */
+        }
+        h1 {
+            color: #5C4033; /* Dark Brown */
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        p {
+            text-align: center;
+            color: #6B4F4F; /* Brown */
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            margin-top: 30px;
+        }
+        input[type="file"] {
+            padding: 15px;
+            border: 2px dashed #D2B48C; /* Tan */
+            border-radius: 10px;
+            cursor: pointer;
+            background-color: #FFF8E7; /* Light Cream */
+            color: #6B4F4F; /* Brown */
+        }
+        button {
+            background-color: #8B4513; /* Saddle Brown */
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #A0522D; /* Sienna */
+        }
+        .result {
+            margin-top: 40px;
+            padding: 25px;
+            border-radius: 10px;
+            background-color: #62966b; /* Light Cream */
+            border: 1px solid #a19584; /* Tan */
+        }
+        .result h2 {
+            margin-top: 0;
+            color: #5C4033; /* Dark Brown */
+        }
+        .error {
+            margin-top: 40px;
+            padding: 25px;
+            border-radius: 10px;
+            background-color: #FFDAB9; /* PeachPuff */
+            border: 1px solid #CD5C5C; /* Indian Red */
+            color: #8B0000; /* Dark Red */
+        }
+
+        /* Animated Grains */
+        .grain-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .grain-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1; /* Sits behind the container but on top of the overlay */
+        }
+
+        
+    </style>
+</head>
+<body>
+    
+        <div class="container">
+            <h1>🌾 Rice Type Predictor</h1>
+            <p>Upload an image of a single rice grain to discover its type.</p>
+
+            <!-- The Upload Form -->
+            <form action="/predict" method="POST" enctype="multipart/form-data">
+                <label for="image">Choose an image:</label>
+                <input type="file" id="image" name="image" accept="image/png, image/jpeg, image/jpg" required>
+                <button type="submit">Predict</button>
+            </form>
+
+            <!-- Display the Error Message -->
+            {% if error_msg %}
+                <div class="error">
+                    <strong>Error:</strong> {{ error_msg }}
+                </div>
+            {% endif %}
+
+            <!-- Display the Prediction Result -->
+            {% if prediction_result %}
+                <div class="result">
+                    <h2>Prediction Result</h2>
+                    <p style="font-size: 24px; font-weight: 700; color: #5C4033;">
+                        Predicted Type: {{ prediction_result.prediction }}
+                    </p>
+                    <h3>Confidence Scores:</h3>
+                    <ul>
+                        {% for rice_type, score in prediction_result.confidence.items() %}
+                            <li><strong>{{ rice_type }}:</strong> {{ "%.2f"|format(score * 100) }}%</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
