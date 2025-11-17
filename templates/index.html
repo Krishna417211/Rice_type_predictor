@@ -151,5 +151,46 @@
             {% endif %}
         </div>
     </div>
+
+
+    <!-- This is in your index.html file -->
+    {% if prediction_result %}
+        <div class="result">
+            <h2>✅ Prediction Result</h2>
+            <p style="font-size: 24px; font-weight: 700; color: #5C4033;">
+                Predicted Type: {{ prediction_result.prediction }}
+            </p>
+
+            <h3>Confidence Scores:</h3>
+            <ul>
+                {% if prediction_result.confidence is mapping %}
+                    {% for rice_type, score in prediction_result.confidence.items() %}
+                        <li><strong>{{ rice_type }}:</strong> {{ "%.2f"|format(score * 100) }}%</li>
+                    {% endfor %}
+                {% else %}
+                    <li><strong>{{ prediction_result.confidence }}</strong></li>
+                {% endif %}
+            </ul>
+        
+            <div class="correction-form">
+                <hr>
+                <p>Wrong prediction? Help us improve!</p>
+                <form action="/report_error" method="POST">
+                    <input type="hidden" name="wrong_prediction" value="{{ prediction_result.prediction }}">
+                    <input type="hidden" name="features" value="{{ features_string }}">
+                
+                    <label for="correct_label">The real type was:</label>
+                    <select name="correct_label" id="correct_label">
+                        {% for label in all_labels %}
+                            <option value="{{ label }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="correct-btn">Submit Correction</button>
+                </form>
+            </div>
+        </div>
+    {% endif %}
 </body>
 </html>
+
+
