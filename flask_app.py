@@ -5,6 +5,7 @@ import joblib
 from PIL import Image
 from flask import Flask, request, render_template, url_for
 
+
 # --- Initialize the Flask App ---
 app = Flask(__name__)
 
