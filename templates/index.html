@@ -8,7 +8,7 @@
         body {
             font-family: 'Georgia', serif;
             line-height: 1.6;
-            background-color: #eedbc8; /* Cream */
+            background-color: #F5F5DC; /* Cream */
             color: #6B4F4F; /* Brown */
             margin: 0;
             padding: 0;
@@ -22,41 +22,64 @@
         }
 
         .overlay {
-            background-color: rgba(79, 24, 4, 0.85);
+            background-color: rgba(107, 79, 79, 0.85); /* Semi-transparent BROWN */
             min-height: 100vh;
             padding: 20px;
+            display: flex;
+            align-items: center; /* Center vertically if content is short */
+            justify-content: center;
         }
 
         .container {
-            max-width: 800px;
-            margin: 40px auto;
+            width: 100%;
+            max-width: 1100px; /* Widened to fit side-by-side */
+            margin: 20px auto;
             background-color: #FFFFFF;
             padding: 40px;
             border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             border: 1px solid #D2B48C;
             position: relative;
             z-index: 10;
         }
 
-        h1 { color: #5C4033; text-align: center; font-size: 2.5em; margin-bottom: 20px; }
-        p { text-align: center; color: #6B4F4F; }
+        h1 { color: #5C4033; text-align: center; font-size: 2.5em; margin-bottom: 10px; }
+        p.subtitle { text-align: center; color: #6B4F4F; margin-bottom: 30px; }
 
+        /* --- NEW: Side-by-Side Layout --- */
+        .row {
+            display: flex;
+            flex-wrap: wrap; /* Stacks on mobile */
+            gap: 40px; /* Space between columns */
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .column {
+            flex: 1;
+            min-width: 300px; /* Prevents columns from getting too thin */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Input Form Styling */
         form {
             display: flex;
             flex-direction: column;
             gap: 20px;
             align-items: center;
-            margin-top: 30px;
+            width: 100%;
+            padding: 20px;
+            background-color: #FFF8E7;
+            border-radius: 10px;
+            border: 2px dashed #D2B48C;
         }
 
         input[type="file"] {
-            padding: 15px;
-            border: 2px dashed #D2B48C;
-            border-radius: 10px;
+            padding: 10px;
+            width: 100%;
             cursor: pointer;
-            background-color: #fffde7;
-            color: #6B4F4F;
             font-family: 'Georgia', serif;
         }
 
@@ -64,133 +87,56 @@
             background-color: #8B4513;
             color: white;
             border: none;
-            padding: 15px 30px;
+            padding: 15px 40px;
             font-size: 18px;
             font-weight: 600;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
             transition: background-color 0.3s ease;
             font-family: 'Georgia', serif;
+            width: 100%;
         }
         button:hover { background-color: #A0522D; }
 
-        /* --- "Happy" Green Result Block --- */
+        /* Result Styling */
         .result {
-            margin-top: 40px;
+            width: 100%;
             padding: 25px;
             border-radius: 10px;
             background-color: #EBF5EB; 
             border: 1px solid #28a745;
             animation: fadeInGlow 1.5s ease-out;
+            box-sizing: border-box;
         }
-        .result h2 { margin-top: 0; color: #2E8B57; }
+        .result h2 { margin-top: 0; color: #2E8B57; text-align: center; }
+        .result p.main-pred { font-size: 24px; font-weight: 700; color: #5C4033; text-align: center; margin: 10px 0 20px 0; }
         
         @keyframes fadeInGlow {
-            0% { opacity: 0; transform: scale(0.95); box-shadow: 0 0 0px 0px rgba(40, 167, 69, 0); }
-            50% { opacity: 1; transform: scale(1.02); box-shadow: 0 0 20px 10px rgba(40, 167, 69, 0.4); }
-            100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0px 0px rgba(40, 167, 69, 0); }
+            0% { opacity: 0; transform: translateX(20px); } /* Slide in from right */
+            100% { opacity: 1; transform: translateX(0); }
         }
         
-        /* --- Flash Message Styling (Error) --- */
-        .error {
-            padding: 20px;
-            border-radius: 10px;
-            background-color: #FFDAB9;
-            border: 1px solid #CD5C5C;
-            color: #8B0000;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        /* --- Flash Message Styling (Thank You) --- */
-        .thank-you {
-            padding: 20px;
-            border-radius: 10px;
-            background-color: #EBF5EB;
-            border: 1px solid #28a745;
-            color: #2E8B57;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 20px;
-        }
+        .flash-messages { width: 100%; margin-bottom: 20px; }
+        .error { padding: 15px; border-radius: 8px; background-color: #FFDAB9; border: 1px solid #CD5C5C; color: #8B0000; text-align: center; }
+        .thank-you { padding: 15px; border-radius: 8px; background-color: #EBF5EB; border: 1px solid #28a745; color: #2E8B57; text-align: center; }
 
-        /* --- "Falling" Rice Animation --- */
-        .grain-container {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            overflow: hidden;
-            z-index: 1;
-        }
-        .grain {
-            position: absolute;
-            top: -20px;
-            width: 8px; height: 15px;
-            background-color: #D2B48C;
-            border-radius: 50%;
-            opacity: 0.7;
-            animation: fall 10s infinite linear;
-        }
-        @keyframes fall {
-            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.7; }
-            90% { opacity: 0.7; }
-            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-        }
-        .grain:nth-child(1) { left: 10%; animation-duration: 8s; animation-delay: 0s; }
-        .grain:nth-child(2) { left: 20%; animation-duration: 12s; animation-delay: 2s; }
-        .grain:nth-child(3) { left: 30%; animation-duration: 7s; animation-delay: 4s; }
-        .grain:nth-child(4) { left: 40%; animation-duration: 11s; animation-delay: 1s; }
-        .grain:nth-child(5) { left: 50%; animation-duration: 9s; animation-delay: 3s; }
-        .grain:nth-child(6) { left: 60%; animation-duration: 13s; animation-delay: 5s; }
-        .grain:nth-child(7) { left: 70%; animation-duration: 6s; animation-delay: 2s; }
-        .grain:nth-child(8) { left: 80%; animation-duration: 10s; animation-delay: 4s; }
-        .grain:nth-child(9) { left: 90%; animation-duration: 8s; animation-delay: 1s; }
+        /* Animation Canvas */
+        .grain-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: 1; }
+        .grain { position: absolute; top: -20px; width: 8px; height: 15px; background-color: #D2B48C; border-radius: 50%; opacity: 0.7; animation: fall 10s infinite linear; }
+        @keyframes fall { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 10% { opacity: 0.7; } 90% { opacity: 0.7; } 100% { transform: translateY(100vh) rotate(360deg); opacity: 0; } }
+        .grain:nth-child(1) { left: 10%; animation-duration: 8s; } .grain:nth-child(2) { left: 20%; animation-duration: 12s; } .grain:nth-child(3) { left: 30%; animation-duration: 7s; } .grain:nth-child(4) { left: 40%; animation-duration: 11s; } .grain:nth-child(5) { left: 50%; animation-duration: 9s; } .grain:nth-child(6) { left: 60%; animation-duration: 13s; } .grain:nth-child(7) { left: 70%; animation-duration: 6s; } .grain:nth-child(8) { left: 80%; animation-duration: 10s; } .grain:nth-child(9) { left: 90%; animation-duration: 8s; }
 
-        /* --- Correction Form Styling --- */
-        .correction-form {
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 1px solid #D2B48C;
-        }
-        .correction-form p {
-            font-weight: bold;
-            color: #6B4F4F;
-            margin-bottom: 15px;
-        }
-        .correction-form form {
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        .correction-form label {
-            font-size: 1em;
-            color: #5C4033;
-        }
-        .correction-form select {
-            padding: 8px;
-            border-radius: 5px;
-            border: 1px solid #D2B48C;
-            font-family: 'Georgia', serif;
-            background-color: #FFF8E7;
-        }
-        .correction-form button {
-            background-color: #DAA520; /* GoldenRod */
-            color: white;
-            padding: 8px 15px;
-            font-size: 0.9em;
-        }
-        .correction-form button:hover {
-            background-color: #B8860B; /* DarkGoldenRod */
-        }
+        /* Correction Form */
+        .correction-form { margin-top: 25px; padding-top: 20px; border-top: 1px solid #D2B48C; text-align: center; }
+        .correction-form select { padding: 8px; margin: 10px 0; border-radius: 5px; background-color: #FFF8E7; }
+        .correction-form button { background-color: #DAA520; padding: 8px 20px; font-size: 0.9em; width: auto; }
+        .correction-form button:hover { background-color: #B8860B; }
     </style>
 </head>
 <body>
     <div class="overlay">
         <div class="grain-container">
+            <!-- Grains -->
             <div class="grain"></div> <div class="grain"></div> <div class="grain"></div>
             <div class="grain"></div> <div class="grain"></div> <div class="grain"></div>
             <div class="grain"></div> <div class="grain"></div> <div class="grain"></div>
@@ -198,72 +144,73 @@
 
         <div class="container">
             <h1>🌾 Rice Type Predictor</h1>
-            <p>Upload an image of a single rice grain to discover its type.</p>
+            <p class="subtitle">Upload an image of a single rice grain to discover its type.</p>
             
-            <!-- --- Flash Message Area --- -->
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="{{ category or 'error' }}"> 
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
+            <!-- Flash Messages -->
+            <div class="flash-messages">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="{{ category or 'error' }}"> {{ message }} </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
 
-            <!-- The Upload Form -->
-            <form action="/predict" method="POST" enctype="multipart/form-data">
-                <label for="image">Choose an image:</label>
-                <input type="file" id="image" name="image" accept="image/png, image/jpeg, image/jpg" required>
-                <button type="submit">Predict</button>
-            </form>
+            <!-- NEW: Flex Row for Side-by-Side Layout -->
+            <div class="row">
+                
+                <!-- Left Column: Input Form -->
+                <div class="column">
+                    <form action="/predict" method="POST" enctype="multipart/form-data">
+                        <label for="image" style="font-weight: bold; color: #5C4033;">Select Image:</label>
+                        <input type="file" id="image" name="image" accept="image/png, image/jpeg, image/jpg" required>
+                        <button type="submit">Predict Rice Type</button>
+                    </form>
+                </div>
 
-            <!-- Display the Prediction Result -->
-            {% if prediction_result %}
-                <div class="result">
-                    <h2>✅ Prediction Result</h2>
-                    <p style="font-size: 24px; font-weight: 700; color: #5C4033;">
-                        Predicted Type: {{ prediction_result.prediction }}
-                    </p>
-                    
-                    <h3>Confidence Scores:</h3>
-                    <ul>
-                        <!-- 
-                        --- THIS IS THE BUG FIX ---
-                        This 'if' statement checks if 'confidence' is a dictionary 
-                        before it tries to loop over it.
-                        -->
-                        {% if prediction_result.confidence is mapping %}
-                            {% for rice_type, score in prediction_result.confidence.items() %}
-                                <li><strong>{{ rice_type }}:</strong> {{ "%.2f"|format(score * 100) }}%</li>
-                            {% endfor %}
-                        {% else %}
-                            <!-- If it's not a dictionary, just print the string -->
-                            <li><strong>{{ prediction_result.confidence }}</strong></li>
-                        {% endif %}
-                    </ul>
-                    
-                    <!-- --- "Report Error" Form --- -->
-                    <div class="correction-form">
-                        <hr>
-                        <p>Wrong prediction? Help us improve!</p>
-                        <form action="/report_error" method="POST">
-                            <!-- Hidden fields to pass data back to the server -->
-                            <input type="hidden" name="wrong_prediction" value="{{ prediction_result.prediction }}">
-                            <input type="hidden" name="features" value="{{ features_string }}">
-                            
-                            <label for="correct_label">The real type was:</label>
-                            <select name="correct_label" id="correct_label">
-                                <!-- Loop through all possible rice types -->
-                                {% for label in all_labels %}
-                                    <option value="{{ label }}">{{ label }}</option>
+                <!-- Right Column: Result (Only shows if prediction exists) -->
+                {% if prediction_result %}
+                <div class="column">
+                    <div class="result">
+                        <h2>✅ Prediction Result</h2>
+                        <p class="main-pred">
+                            {{ prediction_result.prediction }}
+                        </p>
+                        
+                        <h3 style="text-align:center; color:#5C4033;">Confidence:</h3>
+                        <ul>
+                            {% if prediction_result.confidence is mapping %}
+                                {% for rice_type, score in prediction_result.confidence.items() %}
+                                    <li><strong>{{ rice_type }}:</strong> {{ "%.2f"|format(score * 100) }}%</li>
                                 {% endfor %}
-                            </select>
-                            <button type="submit" class="correct-btn">Submit Correction</button>
-                        </form>
+                            {% else %}
+                                <li><strong>{{ prediction_result.confidence }}</strong></li>
+                            {% endif %}
+                        </ul>
+                        
+                        <!-- Correction Form -->
+                        <div class="correction-form">
+                            <hr>
+                            <p>Wrong prediction?</p>
+                            <form action="/report_error" method="POST" style="border:none; padding:0; background:none;">
+                                <input type="hidden" name="wrong_prediction" value="{{ prediction_result.prediction }}">
+                                <input type="hidden" name="features" value="{{ features_string }}">
+                                
+                                <label for="correct_label">Correct Type:</label>
+                                <select name="correct_label" id="correct_label">
+                                    {% for label in all_labels %}
+                                        <option value="{{ label }}">{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button type="submit">Submit Fix</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            {% endif %}
+                {% endif %}
+                
+            </div> <!-- End Row -->
         </div>
     </div>
 </body>
