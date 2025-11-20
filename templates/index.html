@@ -4,214 +4,324 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rice Type Predictor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
     <style>
+        /* --- Modern Harvest Theme --- */
+        :root {
+            --bg-color: #FAF9F6;
+            --primary-green: #606C38;
+            --deep-green: #283618;
+            --harvest-gold: #D4A373;
+            --light-cream: #FEFAE0;
+            --text-dark: #2b2b2b;
+            --white: #ffffff;
+            --shadow: 0 15px 35px rgba(40, 54, 24, 0.15);
+        }
+
         body {
-            font-family: 'Georgia', serif;
+            font-family: 'Poppins', sans-serif;
             line-height: 1.6;
-            background-color: #F5F5DC; /* Cream */
-            color: #6B4F4F; /* Brown */
+            color: var(--text-dark);
             margin: 0;
             padding: 0;
-            background-image: url('https://images.unsplash.com/photo-1586201375765-c129a4d3c275?q=80&w=2070&auto=format&fit=crop');
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            position: relative;
+            /* Safe, clean gradient background */
+            background: linear-gradient(135deg, #FAF9F6 0%, #E8E8E8 100%);
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             overflow-x: hidden;
         }
 
-        .overlay {
-            background-color: rgba(107, 79, 79, 0.85); /* Semi-transparent BROWN */
-            min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            align-items: center; /* Center vertically if content is short */
-            justify-content: center;
-        }
-
+        /* --- Main Single Container --- */
         .container {
-            width: 100%;
-            max-width: 1100px; /* Widened to fit side-by-side */
-            margin: 20px auto;
-            background-color: #FFFFFF;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            border: 1px solid #D2B48C;
+            width: 90%;
+            max-width: 600px; /* Narrower for single-box focus */
+            background-color: var(--white);
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: var(--shadow);
             position: relative;
             z-index: 10;
+            text-align: center;
+            transition: transform 0.3s ease;
         }
 
-        h1 { color: #5C4033; text-align: center; font-size: 2.5em; margin-bottom: 10px; }
-        p.subtitle { text-align: center; color: #6B4F4F; margin-bottom: 30px; }
-
-        /* --- NEW: Side-by-Side Layout --- */
-        .row {
-            display: flex;
-            flex-wrap: wrap; /* Stacks on mobile */
-            gap: 40px; /* Space between columns */
-            justify-content: center;
-            align-items: flex-start;
+        h1 {
+            color: var(--deep-green);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
         }
 
-        .column {
-            flex: 1;
-            min-width: 300px; /* Prevents columns from getting too thin */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        p.subtitle {
+            color: #7f8c8d;
+            font-size: 1em;
+            margin-bottom: 30px;
         }
 
-        /* Input Form Styling */
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            align-items: center;
-            width: 100%;
-            padding: 20px;
-            background-color: #FFF8E7;
-            border-radius: 10px;
-            border: 2px dashed #D2B48C;
+        /* --- Input Area Styles --- */
+        .upload-area {
+            border: 3px dashed var(--harvest-gold);
+            border-radius: 20px;
+            padding: 30px;
+            background-color: #fffcf5;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-green);
+            background-color: #f4f9f4;
         }
 
         input[type="file"] {
-            padding: 10px;
             width: 100%;
+            margin: 15px 0;
+        }
+        
+        input[type="file"]::file-selector-button {
+            margin-right: 15px;
+            border: none;
+            background: var(--harvest-gold);
+            padding: 12px 25px;
+            border-radius: 50px;
+            color: #fff;
             cursor: pointer;
-            font-family: 'Georgia', serif;
+            font-family: 'Poppins', sans-serif;
+            transition: background 0.2s;
+        }
+        
+        input[type="file"]::file-selector-button:hover {
+            background: var(--primary-green);
         }
 
-        button {
-            background-color: #8B4513;
+        button.predict-btn {
+            background-color: var(--deep-green);
             color: white;
             border: none;
             padding: 15px 40px;
-            font-size: 18px;
+            font-size: 1.1em;
             font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(40, 54, 24, 0.3);
+            transition: transform 0.2s;
+        }
+
+        button.predict-btn:hover {
+            transform: translateY(-3px);
+            background-color: var(--primary-green);
+        }
+
+        /* --- Result Area Styles --- */
+        .result-box {
+            animation: popIn 0.5s ease-out;
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .result-header {
+            background-color: #EBF5EB;
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid #28a745;
+            margin-bottom: 30px;
+        }
+
+        .main-pred {
+            font-size: 3em;
+            font-weight: 800;
+            color: var(--deep-green);
+            margin: 10px 0;
+            text-transform: uppercase;
+        }
+
+        /* Confidence Bars */
+        .confidence-item {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+        .bar-bg {
+            width: 100%;
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+        .bar-fill {
+            height: 100%;
+            background-color: var(--harvest-gold);
+            border-radius: 5px;
+        }
+
+        /* Correction & Restart */
+        .action-buttons {
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .restart-btn {
+            text-decoration: none;
+            color: var(--primary-green);
+            font-weight: 600;
+            border: 2px solid var(--primary-green);
+            padding: 10px 30px;
+            border-radius: 50px;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        .restart-btn:hover {
+            background-color: var(--primary-green);
+            color: white;
+        }
+
+        .correction-details {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            width: 100%;
+        }
+        
+        .correction-details select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        .fix-btn {
+            background-color: var(--harvest-gold);
+            color: white;
+            border: none;
+            padding: 10px 20px;
             border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            font-family: 'Georgia', serif;
-            width: 100%;
+            margin-left: 10px;
         }
-        button:hover { background-color: #A0522D; }
 
-        /* Result Styling */
-        .result {
-            width: 100%;
-            padding: 25px;
+        /* Flash Messages */
+        .flash-msg {
+            padding: 15px;
             border-radius: 10px;
-            background-color: #EBF5EB; 
-            border: 1px solid #28a745;
-            animation: fadeInGlow 1.5s ease-out;
-            box-sizing: border-box;
+            margin-bottom: 20px;
+            text-align: center;
         }
-        .result h2 { margin-top: 0; color: #2E8B57; text-align: center; }
-        .result p.main-pred { font-size: 24px; font-weight: 700; color: #5C4033; text-align: center; margin: 10px 0 20px 0; }
-        
-        @keyframes fadeInGlow {
-            0% { opacity: 0; transform: translateX(20px); } /* Slide in from right */
-            100% { opacity: 1; transform: translateX(0); }
-        }
-        
-        .flash-messages { width: 100%; margin-bottom: 20px; }
-        .error { padding: 15px; border-radius: 8px; background-color: #FFDAB9; border: 1px solid #CD5C5C; color: #8B0000; text-align: center; }
-        .thank-you { padding: 15px; border-radius: 8px; background-color: #EBF5EB; border: 1px solid #28a745; color: #2E8B57; text-align: center; }
+        .error { background-color: #ffebee; color: #c62828; }
+        .thank-you { background-color: #e8f5e9; color: #2e7d32; }
 
-        /* Animation Canvas */
-        .grain-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: 1; }
-        .grain { position: absolute; top: -20px; width: 8px; height: 15px; background-color: #D2B48C; border-radius: 50%; opacity: 0.7; animation: fall 10s infinite linear; }
-        @keyframes fall { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 10% { opacity: 0.7; } 90% { opacity: 0.7; } 100% { transform: translateY(100vh) rotate(360deg); opacity: 0; } }
-        .grain:nth-child(1) { left: 10%; animation-duration: 8s; } .grain:nth-child(2) { left: 20%; animation-duration: 12s; } .grain:nth-child(3) { left: 30%; animation-duration: 7s; } .grain:nth-child(4) { left: 40%; animation-duration: 11s; } .grain:nth-child(5) { left: 50%; animation-duration: 9s; } .grain:nth-child(6) { left: 60%; animation-duration: 13s; } .grain:nth-child(7) { left: 70%; animation-duration: 6s; } .grain:nth-child(8) { left: 80%; animation-duration: 10s; } .grain:nth-child(9) { left: 90%; animation-duration: 8s; }
-
-        /* Correction Form */
-        .correction-form { margin-top: 25px; padding-top: 20px; border-top: 1px solid #D2B48C; text-align: center; }
-        .correction-form select { padding: 8px; margin: 10px 0; border-radius: 5px; background-color: #FFF8E7; }
-        .correction-form button { background-color: #DAA520; padding: 8px 20px; font-size: 0.9em; width: auto; }
-        .correction-form button:hover { background-color: #B8860B; }
+        /* Grain Animation */
+        .grain-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; pointer-events: none; }
+        .grain { position: absolute; top: -20px; width: 8px; height: 16px; background-color: var(--harvest-gold); border-radius: 50%; opacity: 0.5; animation: fall linear infinite; }
+        @keyframes fall { to { transform: translateY(100vh) rotate(360deg); } }
     </style>
 </head>
 <body>
-    <div class="overlay">
-        <div class="grain-container">
-            <!-- Grains -->
-            <div class="grain"></div> <div class="grain"></div> <div class="grain"></div>
-            <div class="grain"></div> <div class="grain"></div> <div class="grain"></div>
-            <div class="grain"></div> <div class="grain"></div> <div class="grain"></div>
-        </div>
 
-        <div class="container">
-            <h1>🌾 Rice Type Predictor</h1>
-            <p class="subtitle">Upload an image of a single rice grain to discover its type.</p>
+    <!-- Falling Rice Animation -->
+    <div class="grain-container" id="grainContainer"></div>
+    <script>
+        const container = document.getElementById('grainContainer');
+        for (let i = 0; i < 15; i++) {
+            const grain = document.createElement('div');
+            grain.classList.add('grain');
+            grain.style.left = Math.random() * 100 + 'vw';
+            grain.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            grain.style.animationDelay = (Math.random() * 5) + 's';
+            container.appendChild(grain);
+        }
+    </script>
+
+    <div class="container">
+        
+        <!-- Header -->
+        <h1>🌾 Rice Type Predictor</h1>
+        
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-msg {{ category or 'error' }}"> {{ message }} </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- TOGGLE LOGIC: Show Result OR Input -->
+        {% if prediction_result %}
             
-            <!-- Flash Messages -->
-            <div class="flash-messages">
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        {% for category, message in messages %}
-                            <div class="{{ category or 'error' }}"> {{ message }} </div>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
-            </div>
-
-            <!-- NEW: Flex Row for Side-by-Side Layout -->
-            <div class="row">
-                
-                <!-- Left Column: Input Form -->
-                <div class="column">
-                    <form action="/predict" method="POST" enctype="multipart/form-data">
-                        <label for="image" style="font-weight: bold; color: #5C4033;">Select Image:</label>
-                        <input type="file" id="image" name="image" accept="image/png, image/jpeg, image/jpg" required>
-                        <button type="submit">Predict Rice Type</button>
-                    </form>
+            <!-- === RESULT VIEW === -->
+            <div class="result-box">
+                <div class="result-header">
+                    <p style="margin:0; color:#2E8B57; font-weight:600;">Analysis Complete</p>
+                    <div class="main-pred">{{ prediction_result.prediction }}</div>
                 </div>
 
-                <!-- Right Column: Result (Only shows if prediction exists) -->
-                {% if prediction_result %}
-                <div class="column">
-                    <div class="result">
-                        <h2>✅ Prediction Result</h2>
-                        <p class="main-pred">
-                            {{ prediction_result.prediction }}
-                        </p>
-                        
-                        <h3 style="text-align:center; color:#5C4033;">Confidence:</h3>
-                        <ul>
-                            {% if prediction_result.confidence is mapping %}
-                                {% for rice_type, score in prediction_result.confidence.items() %}
-                                    <li><strong>{{ rice_type }}:</strong> {{ "%.2f"|format(score * 100) }}%</li>
+                <div style="text-align: left;">
+                    <p style="color:var(--text-light); font-size:0.9em; margin-bottom:10px;">Confidence Levels:</p>
+                    {% if prediction_result.confidence is mapping %}
+                        {% for rice_type, score in prediction_result.confidence.items() %}
+                            <div class="confidence-item">
+                                <span>{{ rice_type }}</span>
+                                <span>{{ "%.0f"|format(score * 100) }}%</span>
+                            </div>
+                            <div class="bar-bg">
+                                <div class="bar-fill" style="width: 100%;"></div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p style="color:var(--primary-green); font-weight:bold; text-align:center;">{{ prediction_result.confidence }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Actions -->
+                <div class="action-buttons">
+                    <!-- Predict Again Button -->
+                    <a href="/" class="restart-btn">Predict Another Image</a>
+                    
+                    <!-- Correction Form -->
+                    <div class="correction-details">
+                        <p style="font-size:0.85em; color:#999;">Is this wrong? Help the model learn:</p>
+                        <form action="/report_error" method="POST">
+                            <input type="hidden" name="wrong_prediction" value="{{ prediction_result.prediction }}">
+                            <input type="hidden" name="features" value="{{ features_string }}">
+                            
+                            <select name="correct_label" required>
+                                <option value="" disabled selected>Select Correct Type</option>
+                                {% for label in all_labels %}
+                                    <option value="{{ label }}">{{ label }}</option>
                                 {% endfor %}
-                            {% else %}
-                                <li><strong>{{ prediction_result.confidence }}</strong></li>
-                            {% endif %}
-                        </ul>
-                        
-                        <!-- Correction Form -->
-                        <div class="correction-form">
-                            <hr>
-                            <p>Wrong prediction?</p>
-                            <form action="/report_error" method="POST" style="border:none; padding:0; background:none;">
-                                <input type="hidden" name="wrong_prediction" value="{{ prediction_result.prediction }}">
-                                <input type="hidden" name="features" value="{{ features_string }}">
-                                
-                                <label for="correct_label">Correct Type:</label>
-                                <select name="correct_label" id="correct_label">
-                                    {% for label in all_labels %}
-                                        <option value="{{ label }}">{{ label }}</option>
-                                    {% endfor %}
-                                </select>
-                                <button type="submit">Submit Fix</button>
-                            </form>
-                        </div>
+                            </select>
+                            <button type="submit" class="fix-btn">Fix</button>
+                        </form>
                     </div>
                 </div>
-                {% endif %}
-                
-            </div> <!-- End Row -->
-        </div>
+            </div>
+
+        {% else %}
+
+            <!-- === INPUT VIEW === -->
+            <p class="subtitle">Upload an image of a single grain for instant AI analysis.</p>
+            <form action="/predict" method="POST" enctype="multipart/form-data" class="upload-area">
+                <label style="display:block; margin-bottom:15px; font-weight:600; color:var(--deep-green);">Select Image</label>
+                <input type="file" id="image" name="image" accept="image/png, image/jpeg, image/jpg" required>
+                <button type="submit" class="predict-btn">Analyze Grain</button>
+            </form>
+
+        {% endif %}
+        
     </div>
+
 </body>
 </html>
